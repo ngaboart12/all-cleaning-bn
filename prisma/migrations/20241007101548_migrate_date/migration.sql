@@ -9,114 +9,133 @@ CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'PAID', 'FAILED');
 
 -- CreateTable
 CREATE TABLE "Otps" (
-    "id" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "code" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "email" STRING NOT NULL,
+    "code" STRING NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Otps_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "phone_number" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "otp" INTEGER,
+    "id" STRING NOT NULL,
+    "name" STRING NOT NULL,
+    "email" STRING NOT NULL,
+    "phone_number" STRING NOT NULL,
+    "password" STRING NOT NULL,
+    "otp" INT4,
     "expireIn" TIMESTAMP(3),
-    "state" TEXT NOT NULL,
-    "city" TEXT NOT NULL,
-    "isVerfied" BOOLEAN DEFAULT false,
+    "state" STRING NOT NULL,
+    "city" STRING NOT NULL,
+    "isVerified" BOOL DEFAULT false,
     "role" "UserRole" NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Provider" (
-    "id" TEXT NOT NULL,
-    "companyName" TEXT NOT NULL,
-    "companyBio" TEXT NOT NULL,
-    "companyLogo" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "files" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "companyName" STRING NOT NULL,
+    "companyBio" STRING NOT NULL,
+    "companyLogo" STRING NOT NULL,
+    "email" STRING NOT NULL,
+    "files" STRING NOT NULL,
+    "userId" STRING NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Provider_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "ProviderOnService" (
-    "id" TEXT NOT NULL,
-    "providerId" TEXT NOT NULL,
-    "serviceId" TEXT NOT NULL,
-    "description" TEXT,
-    "isComplete" BOOLEAN NOT NULL DEFAULT false,
-    "estimatedPrice" DOUBLE PRECISION,
-    "additionalInfo" TEXT,
+    "id" STRING NOT NULL,
+    "providerId" STRING NOT NULL,
+    "serviceId" STRING NOT NULL,
+    "description" STRING,
+    "isComplete" BOOL NOT NULL DEFAULT false,
+    "estimatedPrice" FLOAT8,
+    "additionalInfo" STRING,
+    "media" STRING,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "ProviderOnService_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Service" (
-    "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "title" STRING NOT NULL,
+    "description" STRING NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Service_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "AdditionalFees" (
-    "id" TEXT NOT NULL,
-    "providerOnServiceId" TEXT NOT NULL,
-    "fees" DOUBLE PRECISION NOT NULL,
-    "title" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "providerOnServiceId" STRING NOT NULL,
+    "fees" FLOAT8 NOT NULL,
+    "title" STRING NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "AdditionalFees_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Booking" (
-    "id" TEXT NOT NULL,
-    "serviceId" TEXT NOT NULL,
-    "providerId" TEXT NOT NULL,
-    "clientId" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "serviceId" STRING NOT NULL,
+    "providerId" STRING NOT NULL,
+    "clientId" STRING NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "status" "BookingStatus" NOT NULL DEFAULT 'PENDING',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Booking_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Review" (
-    "id" TEXT NOT NULL,
-    "rating" INTEGER NOT NULL DEFAULT 0,
-    "comment" TEXT,
-    "clientId" TEXT NOT NULL,
-    "serviceId" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "rating" INT4 NOT NULL DEFAULT 0,
+    "comment" STRING,
+    "clientId" STRING NOT NULL,
+    "serviceId" STRING NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Review_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Payment" (
-    "id" TEXT NOT NULL,
-    "amount" DOUBLE PRECISION NOT NULL,
+    "id" STRING NOT NULL,
+    "amount" FLOAT8 NOT NULL,
     "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
-    "bookingId" TEXT NOT NULL,
+    "bookingId" STRING NOT NULL,
     "paymentDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Payment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "_BookingToReview" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
+    "A" STRING NOT NULL,
+    "B" STRING NOT NULL
 );
 
 -- CreateIndex
