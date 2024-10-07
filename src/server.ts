@@ -2,7 +2,7 @@ import express from "express";
 import { config } from "dotenv";
 import { PrismaClient } from "@prisma/client";
 import router from "./routes";
-const prisma = require("../prisma/");
+const prisma = require("../prisma/prisma.js");
 import cors from "cors";
 config();
 
