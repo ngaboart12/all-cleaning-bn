@@ -4,7 +4,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon src/server.ts",
-    "start": "node src/server.ts ",
+    "start": "node dist/server.js ",
     "build": "tsc",
     "migrate": "npx prisma migrate dev --name migrate-$(date +%Y%m%d%H%M%S)",
     "generate": "npx prisma generate",

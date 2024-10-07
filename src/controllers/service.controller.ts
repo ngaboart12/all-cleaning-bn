@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import prisma from "../../prisma/prisma";
+const prisma = require("../../prisma/prisma");
 
 export const selectBaseServices = async (req: Request, res: Response) => {
   const services = await prisma.service.findMany();

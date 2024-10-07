@@ -1,4 +1,4 @@
-import prisma from "../../prisma/prisma";
+const prisma = require("../../prisma/prisma");
 
 type ServiceProps = {
   description: string;

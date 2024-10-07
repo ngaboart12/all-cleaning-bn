@@ -5,11 +5,11 @@ import dotenv from "dotenv"
 dotenv.config()
 
 import { config } from "dotenv";
-import prisma from "../../prisma/prisma";
 import { Prisma } from "@prisma/client";
 import { json } from "stream/consumers";
 import { createProvider, createServiceData } from "../service/provider.service";
 import { sendOtp } from "../service/mail.service";
+const prisma = require("../../prisma/prisma");
 
 config();
 

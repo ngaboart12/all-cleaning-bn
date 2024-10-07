@@ -8,8 +8,7 @@ import {
   updateServiceById,
 } from "../service/provider.service";
 import { validate_new_service } from "../validations/service.validation";
-import prisma from "../../prisma/prisma";
-
+const prisma = require("../../prisma/prisma");
 export const AllProviders = async(req:Request,res:Response)=>{
   try {
     const providers = await prisma.provider.findMany()
