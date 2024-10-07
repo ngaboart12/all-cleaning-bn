@@ -1,0 +1,167 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  CLIENT
+  PROVIDER
+}
+
+enum BookingStatus {
+  PENDING
+  ACCEPTED
+  COMPLETED
+  CANCELED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+model Otps {
+  id      String   @id @default(uuid())
+  email   String   @unique
+  code    String
+  expires DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  phone_number String    @unique
+  password     String
+  otp          Int?
+  expireIn     DateTime?
+  state        String
+  city         String
+  isVerified    Boolean?  @default(false)
+  role         UserRole
+  bookings     Booking[]
+  reviews      Review[]
+
+  Provider Provider?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Provider {
+  id          String @id @default(uuid())
+  companyName String @unique
+  companyBio  String
+  companyLogo String
+  email       String @unique
+  files       String
+  userId      String @unique
+  user        User   @relation(fields: [userId], references: [id])
+
+  services ProviderOnService[]
+  bookings Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProviderOnService {
+  id         String   @id @default(uuid())
+  providerId String
+  provider   Provider @relation(fields: [providerId], references: [id])
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  description String?
+  isComplete  Boolean @default(false)
+
+  estimatedPrice Float?
+  additionalInfo String?
+  AdditionalFees AdditionalFees[]
+  media String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([providerId, serviceId])
+}
+
+model Service {
+  id          String @id @default(uuid())
+  title       String
+  description String
+
+  ProviderOnService ProviderOnService[]
+  bookings Booking[] 
+  Review   Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdditionalFees {
+  id                  String            @id @default(uuid())
+  providerOnServiceId String
+  providerOnService   ProviderOnService @relation(fields: [providerOnServiceId], references: [id])
+
+  fees  Float
+  title String 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Booking {
+  id         String        @id @default(uuid())
+  serviceId  String
+  service    Service       @relation(fields: [serviceId], references: [id])
+  providerId String
+  provider   Provider      @relation(fields: [providerId], references: [id])
+  clientId   String
+  client     User          @relation(fields: [clientId], references: [id])
+  date       DateTime
+  status     BookingStatus @default(PENDING)
+
+  payment Payment? 
+
+  Review Review[] 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id        String  @id @default(uuid())
+  rating    Int     @default(0)
+  comment   String?
+  clientId  String
+  client    User    @relation(fields: [clientId], references: [id])
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  Booking Booking[] 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Payment {
+  id          String        @id @default(uuid())
+  amount      Float
+  status      PaymentStatus @default(PENDING)
+  bookingId   String        @unique
+  booking     Booking       @relation(fields: [bookingId], references: [id])
+  paymentDate DateTime      @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
